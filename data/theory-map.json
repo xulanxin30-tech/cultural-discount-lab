@@ -1,0 +1,29 @@
+{
+  "theories": [
+    {"id":"cultural_discount","name":"文化折扣","english":"Cultural Discount","scholar":"Hoskins & Mirus (1988)","definition":"文化产品跨越文化边界时，因语言、风格、指涉对象与价值观差异导致价值贬损。","paperRef":"论文第二部分（二）（三）、第六部分（一）"},
+    {"id":"high_low_context","name":"高语境 / 低语境文化","english":"High / Low Context Culture","scholar":"Edward T. Hall (1976)","definition":"高语境文化的意义高度依赖共享背景；进入低语境受众视野时更易发生解码损耗。","paperRef":"论文第五部分（三）"},
+    {"id":"media_event","name":"媒介事件","english":"Media Event","scholar":"Dayan & Katz 传统；论文引用议程设置","definition":"权威媒介背书与直播式共享观看促成全民注意力，形成集体记忆点。","paperRef":"论文第四部分（一）"},
+    {"id":"three_stage","name":"三阶段全球化路径","english":"Three-stage Globalization","scholar":"论文提炼","definition":"沿文化距离由近及远：东南亚深耕 → 欧美试水 → 全球扩张。","paperRef":"论文第五部分（一）表 1"},
+    {"id":"localization","name":"本地化运营","english":"Localization Operations","scholar":"论文提炼","definition":"分市场、分平台的差异化编码与解码适配，包括语言、媒体、票务与演出协作。","paperRef":"论文第五部分（二）（五）"},
+    {"id":"fan_economy","name":"粉丝社群经济","english":"Fan Community Economy","scholar":"论文提炼","definition":"将瞬时流量转化为有组织、高粘性的长期关系资产。","paperRef":"论文第四部分（三）"},
+    {"id":"soft_power","name":"软实力","english":"Soft Power","scholar":"Joseph S. Nye","definition":"以吸引而非强制达成影响力，是跨文化传播的总纲。","paperRef":"论文第二部分（二）"},
+    {"id":"city_brand","name":"城市品牌","english":"City Branding","scholar":"Kavaratzis (2004)","definition":"城市品牌应从营销传播上升为包含文化活动在内的整体沟通体系。","paperRef":"论文第二部分（二）、第四部分（二）"}
+  ],
+  "mappings": [
+    {"decision":"variety_show","theories":["media_event"],"rule":"权威平台 × 高质量 live → 公信力嫁接 → 文化折扣下降","formula":"discount -= 0.10; credibility += 0.18; reach += 0.22"},
+    {"decision":"language_eu_us","theories":["high_low_context","cultural_discount"],"rule":"低语境可解码要素承载高语境内核：母语演唱使文化折扣降低 20%","formula":"discount -= 0.20"},
+    {"decision":"spanish_album","theories":["cultural_discount","localization"],"rule":"主动语言迁移 → 目标语境适配 → 拉美折扣显著下降","formula":"discount -= 0.18; reach += 0.14"},
+    {"decision":"local_kol","theories":["localization","cultural_discount"],"rule":"本土 KOL 渠道渗透 → 热度从核心粉丝扩散至大众市场 → 折扣降低 10%","formula":"discount -= 0.10; reach += 0.14"},
+    {"decision":"multilingual_thanks","theories":["high_low_context","localization"],"rule":"本土语言致谢 → 心理距离缩短","formula":"discount -= 0.06"},
+    {"decision":"tiktok_challenge","theories":["localization","fan_economy"],"rule":"短视频挑战赛 → 算法触达 Z 世代 → 二创社群扩散","formula":"reach += 0.18; community += 0.12"},
+    {"decision":"fan_community","theories":["fan_economy"],"rule":"专属社群 → 瞬时流量转长期关系资产","formula":"community += 0.20"},
+    {"decision":"ip_collab","theories":["media_event"],"rule":"借船出海：成熟 IP 受众结构完成圈层渗透","formula":"reach += 0.16; credibility += 0.12"},
+    {"decision":"stadium_tour","theories":["media_event","city_brand"],"rule":"艺人 IP + 城市地标 + 文旅经济 → 复合型消费事件","formula":"tourism += 0.28; reach += 0.20; budget += 0.30"},
+    {"decision":"city_tourism","theories":["city_brand","localization"],"rule":"演唱会升级为城市文化新名片","formula":"tourism += 0.24"},
+    {"decision":"prestige_stage","theories":["media_event","cultural_discount"],"rule":"顶级舞台背书 → 权威媒体聚焦 → 流媒体长尾扩散","formula":"credibility += 0.18; discount -= 0.07"},
+    {"decision":"streaming_longtail","theories":["localization"],"rule":"流媒体沉淀可复用长尾资产","formula":"reach += 0.12"},
+    {"decision":"crisis_response","theories":["fan_economy","media_event"],"rule":"长期主义叙事 → 信任资产积累","formula":"credibility += 0.14; community += 0.10"},
+    {"decision":"re_record","theories":["fan_economy","cultural_discount"],"rule":"创作者身份重夺话语权 → 品牌可信度上升","formula":"credibility += 0.12; discount -= 0.04"},
+    {"decision":"ai_virtual","theories":["cultural_discount","localization"],"rule":"技术放大传播势能但不替代情感厚度","formula":"discount -= 0.06; reach += 0.10; risk += 0.04"}
+  ]
+}
