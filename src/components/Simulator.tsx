@@ -63,7 +63,7 @@ export default function Simulator() {
       incrementChart.current?.dispose();
       stageChart.current?.dispose();
     };
-  }, []);
+  }, [loading]);
 
   const result = useMemo(
     () => (rules && decisions.length ? runSimulation(choices, decisions, rules) : null),

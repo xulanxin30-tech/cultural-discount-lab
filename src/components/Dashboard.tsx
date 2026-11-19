@@ -56,7 +56,7 @@ export default function Dashboard() {
       mapInst.current = null;
       layer.current = null;
     };
-  }, []);
+  }, [loading]);
 
   useEffect(() => {
     if (!layer.current) return;
@@ -100,7 +100,7 @@ export default function Dashboard() {
       choiceBarChart.current?.dispose();
       choiceLineChart.current?.dispose();
     };
-  }, []);
+  }, [loading]);
 
   useEffect(() => {
     lineChart.current?.setOption(
