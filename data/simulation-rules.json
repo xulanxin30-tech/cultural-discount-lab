@@ -11,7 +11,9 @@
     "baselineViewsM": 300,
     "baselineAudience": 7000000,
     "baselineBoxOfficeUsdM": 424,
-    "baselineTourismCnyM": 10000
+    "baselineTourismCnyM": 10000,
+    "initialExposureM": 180,
+    "initialFollowersM": 25
   },
   "formula": {
     "discount": "clamp(initial + Σ effects.discount, 0.05, 0.95)",
