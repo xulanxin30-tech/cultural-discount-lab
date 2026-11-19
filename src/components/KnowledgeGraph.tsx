@@ -6,11 +6,11 @@ import { loadGraph } from '../lib/data';
 import type { GraphData, GraphNode } from '../types';
 
 const groupStyle: Record<string, { background: string; border: string }> = {
-  person: { background: '#c0392b', border: '#922b21' },
-  theory: { background: '#2563a6', border: '#1d4e89' },
-  event: { background: '#d97706', border: '#a85c05' },
-  strategy: { background: '#2e8b57', border: '#216c43' },
-  outcome: { background: '#7c3aed', border: '#5b21b6' },
+  person: { background: '#a63d2f', border: '#7f2d23' },
+  theory: { background: '#3d5a6c', border: '#2c4352' },
+  event: { background: '#a67c3d', border: '#7d5c2d' },
+  strategy: { background: '#5f735c', border: '#44553f' },
+  outcome: { background: '#6b5b73', border: '#4e4254' },
 };
 
 export default function KnowledgeGraph() {
@@ -50,7 +50,7 @@ export default function KnowledgeGraph() {
         arrows: 'to',
         label: edge.label,
         font: { size: 10, color: '#6b7280', align: 'middle' },
-        color: { color: '#b8c2d0', highlight: '#c0392b' },
+        color: { color: '#c9c2b6', highlight: '#a63d2f' },
       })),
     );
 
@@ -93,10 +93,10 @@ export default function KnowledgeGraph() {
     <section className="panel">
       <div className="panel-head">
         <div>
-          <h2 className="panel-title">知识图谱 · 理论如何驱动结果</h2>
-          <p className="panel-sub">点击节点查看定义与论文依据；蓝色为理论、红色为人物、橙色为事件、绿色为策略、紫色为结果。</p>
+          <h2 className="panel-title">知识图谱 · 理论与结果的因果链</h2>
+          <p className="panel-sub">点击节点查看定义与论文依据；深蓝为理论、朱红为人物、赭石为事件、灰绿为策略、灰紫为结果。</p>
         </div>
-        <span className="badge">{graph.nodes.length} 节点 · {graph.edges.length} 关系</span>
+        <span className="badge">{graph.nodes.length} Nodes / {graph.edges.length} Edges</span>
       </div>
 
       <div className="graph-layout">

@@ -45,8 +45,8 @@ export default function Dashboard() {
   useEffect(() => {
     if (!mapEl.current || mapInst.current) return;
     const map = L.map(mapEl.current).setView([28, 70], 2);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 18,
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
       attribution: '© OpenStreetMap contributors',
     }).addTo(map);
     layer.current = L.layerGroup().addTo(map);
@@ -67,10 +67,10 @@ export default function Dashboard() {
         const intensity = Math.min(1, (city.boxOfficeUsdM + city.tourismCnyM / 12) / 80);
         const marker = L.circleMarker([city.lat, city.lng], {
           radius: 5 + intensity * 11,
-          color: '#c0392b',
+          color: '#a63d2f',
           weight: 1,
-          fillColor: intensity > 0.5 ? '#e74c3c' : '#f39c12',
-          fillOpacity: 0.55,
+          fillColor: intensity > 0.5 ? '#a63d2f' : '#b9825f',
+          fillOpacity: 0.62,
         })
           .bindPopup(
             `<b>${city.name}</b><br/>${city.year} · ${city.stage}<br/>票房 ${city.boxOfficeUsdM} 百万美元<br/>文旅消费 ${city.tourismCnyM} 百万元`,
@@ -79,6 +79,12 @@ export default function Dashboard() {
         marker.addTo(layer.current!);
       });
   }, [cities, year]);
+
+  useEffect(() => {
+    if (!mapInst.current || !cities.length) return;
+    const bounds = L.latLngBounds(cities.map((city) => [city.lat, city.lng] as [number, number]));
+    mapInst.current.fitBounds(bounds, { padding: [28, 28], maxZoom: 3 });
+  }, [cities]);
 
   useEffect(() => {
     if (!lineEl.current || !barEl.current || !choiceBarEl.current || !choiceLineEl.current) return;
@@ -107,11 +113,11 @@ export default function Dashboard() {
       {
         animationDuration: 600,
         tooltip: { trigger: 'axis' },
-        legend: { top: 0, textStyle: { color: '#4b5563' } },
+        legend: { top: 0, textStyle: { color: '#5d574e' } },
         grid: { left: 50, right: 54, top: 38, bottom: 30 },
-        xAxis: { type: 'category', data: series.map((p) => p.year), axisLine: { lineStyle: { color: '#c9d0da' } } },
+        xAxis: { type: 'category', data: series.map((p) => p.year), axisLine: { lineStyle: { color: '#c9c2b6' } } },
         yAxis: [
-          { type: 'value', name: '百万', splitLine: { lineStyle: { color: '#eef1f6' } } },
+          { type: 'value', name: '百万', splitLine: { lineStyle: { color: '#e6e0d5' } } },
           {
             type: 'value',
             name: '折扣',
@@ -122,16 +128,17 @@ export default function Dashboard() {
           },
         ],
         series: [
-          { name: 'YouTube 播放量（百万）', type: 'line', smooth: true, symbolSize: 7, data: series.map((p) => p.youtubeViewsM), itemStyle: { color: '#c0392b' } },
-          { name: '粉丝量（百万）', type: 'line', smooth: true, symbolSize: 7, data: series.map((p) => p.followersM), itemStyle: { color: '#2563a6' } },
+          { name: 'YouTube 播放量（百万）', type: 'line', smooth: true, symbolSize: 6, data: series.map((p) => p.youtubeViewsM), itemStyle: { color: '#a63d2f' }, lineStyle: { width: 2 } },
+          { name: '粉丝量（百万）', type: 'line', smooth: true, symbolSize: 6, data: series.map((p) => p.followersM), itemStyle: { color: '#3d5a6c' }, lineStyle: { width: 2 } },
           {
             name: '文化折扣指数（模型）',
             type: 'line',
             yAxisIndex: 1,
             smooth: true,
             data: series.map((p) => p.discountIndex),
-            itemStyle: { color: '#d97706' },
-            areaStyle: { color: 'rgba(217,119,6,0.10)' },
+            itemStyle: { color: '#a67c3d' },
+            lineStyle: { width: 2 },
+            areaStyle: { color: 'rgba(166,124,61,0.08)' },
           },
         ],
       },
@@ -150,15 +157,15 @@ export default function Dashboard() {
         animationDuration: 500,
         tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
         grid: { left: 90, right: 30, top: 12, bottom: 26 },
-        xAxis: { type: 'value', name: '百万元', splitLine: { lineStyle: { color: '#eef1f6' } } },
-        yAxis: { type: 'category', data: topCities.map((c) => c.name), axisLine: { lineStyle: { color: '#c9d0da' } } },
+        xAxis: { type: 'value', name: '百万元', splitLine: { lineStyle: { color: '#e6e0d5' } } },
+        yAxis: { type: 'category', data: topCities.map((c) => c.name), axisLine: { lineStyle: { color: '#c9c2b6' } } },
         series: [
           {
             type: 'bar',
             data: topCities.map((c) => c.tourismCnyM),
-            barWidth: '55%',
-            itemStyle: { color: '#e07a5f', borderRadius: [0, 6, 6, 0] },
-            label: { show: true, position: 'right', fontSize: 11 },
+            barWidth: '46%',
+            itemStyle: { color: '#a63d2f', borderRadius: [0, 2, 2, 0] },
+            label: { show: true, position: 'right', fontSize: 10, color: '#5d574e' },
           },
         ],
       },
@@ -175,15 +182,15 @@ export default function Dashboard() {
       {
         animationDuration: 450,
         tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
-        legend: { top: 0, textStyle: { color: '#4b5563' } },
+        legend: { top: 0, textStyle: { color: '#5d574e' } },
         grid: { left: 46, right: 48, top: 40, bottom: 78 },
         xAxis: {
           type: 'category',
           data: impacts.map((item) => (item.label.length > 10 ? `${item.label.slice(0, 10)}…` : item.label)),
-          axisLabel: { interval: 0, rotate: 22, fontSize: 11, color: '#6b7280' },
+          axisLabel: { interval: 0, rotate: 22, fontSize: 11, color: '#6f6a61' },
         },
         yAxis: [
-          { type: 'value', name: '曝光 M', splitLine: { lineStyle: { color: '#eef1f6' } } },
+          { type: 'value', name: '曝光 M', splitLine: { lineStyle: { color: '#e6e0d5' } } },
           { type: 'value', name: '粉丝 M', splitLine: { show: false } },
         ],
         series: [
@@ -192,8 +199,8 @@ export default function Dashboard() {
             type: 'bar',
             data: impacts.map((item) => item.exposureDeltaM),
             barWidth: '34%',
-            itemStyle: { color: '#c0392b', borderRadius: [5, 5, 0, 0] },
-            label: { show: true, position: 'top', fontSize: 10 },
+            itemStyle: { color: '#a63d2f', borderRadius: [2, 2, 0, 0] },
+            label: { show: true, position: 'top', fontSize: 10, color: '#5d574e' },
           },
           {
             name: '粉丝增量（百万人）',
@@ -201,8 +208,8 @@ export default function Dashboard() {
             yAxisIndex: 1,
             data: impacts.map((item) => item.followersDeltaM),
             barWidth: '34%',
-            itemStyle: { color: '#2563a6', borderRadius: [5, 5, 0, 0] },
-            label: { show: true, position: 'top', fontSize: 10 },
+            itemStyle: { color: '#3d5a6c', borderRadius: [2, 2, 0, 0] },
+            label: { show: true, position: 'top', fontSize: 10, color: '#5d574e' },
           },
         ],
       },
@@ -214,23 +221,23 @@ export default function Dashboard() {
   useEffect(() => {
     if (!rules || !decisions.length || !choiceLineChart.current) return;
     const paths = comparePredictions(decisions, rules);
-    const colors = ['#c0392b', '#7f8c8d', '#2e8b57'];
+    const colors = ['#a63d2f', '#8b857b', '#5f735c'];
     choiceLineChart.current.setOption(
       {
         animationDuration: 500,
         tooltip: { trigger: 'axis' },
-        legend: { top: 0, textStyle: { color: '#4b5563' } },
+        legend: { top: 0, textStyle: { color: '#5d574e' } },
         grid: { left: 54, right: 24, top: 40, bottom: 34 },
         xAxis: {
           type: 'category',
           data: paths[0]?.points.map((p) => p.shortLabel) ?? [],
           name: '决策步',
-          axisLine: { lineStyle: { color: '#c9d0da' } },
+          axisLine: { lineStyle: { color: '#c9c2b6' } },
         },
         yAxis: {
           type: 'value',
           name: predictMetric === 'exposure' ? '累计曝光（百万次）' : '累计粉丝（百万人）',
-          splitLine: { lineStyle: { color: '#eef1f6' } },
+          splitLine: { lineStyle: { color: '#e6e0d5' } },
         },
         series: paths.map((path, index) => ({
           name: path.label,
@@ -270,10 +277,10 @@ export default function Dashboard() {
       <section className="panel">
         <div className="panel-head">
           <div>
-            <h2 className="panel-title">数据仪表盘 · 世界巡演热力图</h2>
+            <h2 className="panel-title">世界巡演热力图</h2>
             <p className="panel-sub">拖动时间轴，观察巡演版图与文旅溢出如何逐年扩展；点击圆点查看城市详情。</p>
           </div>
-          <span className="badge">样本城市 {filtered.length} / {cities.length}</span>
+          <span className="badge">Sample N = {filtered.length}</span>
         </div>
 
         <div className="slider-row">
@@ -294,8 +301,8 @@ export default function Dashboard() {
           <div>
             <div className="map-canvas" ref={mapEl} />
             <div className="legend" style={{ marginTop: 8 }}>
-              <span><i style={{ background: '#f39c12' }} />较低强度</span>
-              <span><i style={{ background: '#e74c3c' }} />较高强度（票房 + 文旅消费）</span>
+              <span><i style={{ background: '#b9825f' }} />较低强度</span>
+              <span><i style={{ background: '#a63d2f' }} />较高强度（票房 + 文旅消费）</span>
               <span>底图 © OpenStreetMap contributors</span>
             </div>
           </div>
@@ -326,7 +333,7 @@ export default function Dashboard() {
       <section className="panel">
         <div className="panel-head">
           <div>
-            <h2 className="panel-title">时间轴：从「被听见」到「被尊重」</h2>
+            <h2 className="panel-title">时间轴 · 从被听见，到被尊重</h2>
             <p className="panel-sub">播放量与粉丝来自论文披露；文化折扣指数为模型估算，随策略演进下降。</p>
           </div>
         </div>
@@ -336,7 +343,7 @@ export default function Dashboard() {
       <section className="panel">
         <div className="panel-head">
           <div>
-            <h2 className="panel-title">文旅溢出 · 城市 TOP 8</h2>
+            <h2 className="panel-title">文旅溢出 · 城市前八</h2>
             <p className="panel-sub">「艺人 IP + 城市地标 + 文旅经济」的城市品牌机制。</p>
           </div>
           <span className="badge ok">单位：人民币百万元</span>
@@ -347,10 +354,10 @@ export default function Dashboard() {
       <section className="panel">
         <div className="panel-head">
           <div>
-            <h2 className="panel-title">不同选择的预测对比 · 柱状图与折线图</h2>
+            <h2 className="panel-title">选择差异 · 预测对比</h2>
             <p className="panel-sub">柱状图比较同一决策下各选项的曝光/粉丝增量；折线图比较三条策略路径的累计预测。阶段系数不同，效果自然分化。</p>
           </div>
-          <span className="badge warn">教学预测模型</span>
+          <span className="badge warn">Model v1.0</span>
         </div>
 
         <div className="control-row">
@@ -371,7 +378,7 @@ export default function Dashboard() {
         <div className="chart-box small" ref={choiceBarEl} />
         <div className="chart-box" ref={choiceLineEl} />
 
-        <h3 className="panel-title" style={{ marginTop: 18 }}>论文路径的阶段差异化拆解</h3>
+        <h3 className="panel-title" style={{ marginTop: 18 }}>论文路径 · 阶段贡献拆解</h3>
         <p className="panel-sub">同一策略在不同阶段贡献的曝光与粉丝增量不同：内地破圈和全球扩张是高杠杆阶段。</p>
         <div style={{ overflowX: 'auto' }}>
           <table className="compare-table">

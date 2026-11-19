@@ -112,15 +112,15 @@ export default function Simulator() {
         xAxis: {
           type: 'category',
           data: result.curve.map((p) => (p.label.length > 13 ? `${p.label.slice(0, 13)}…` : p.label)),
-          axisLabel: { rotate: 38, fontSize: 10, color: '#6b7280' },
-          axisLine: { lineStyle: { color: '#c9d0da' } },
+          axisLabel: { rotate: 38, fontSize: 10, color: '#6f6a61' },
+          axisLine: { lineStyle: { color: '#c9c2b6' } },
         },
         yAxis: {
           type: 'value',
           min: 0,
           max: 1,
           axisLabel: { formatter: (value: number) => `${Math.round(value * 100)}%` },
-          splitLine: { lineStyle: { color: '#eef1f6' } },
+          splitLine: { lineStyle: { color: '#e6e0d5' } },
         },
         series: [
           {
@@ -129,13 +129,13 @@ export default function Simulator() {
             smooth: true,
             symbolSize: 6,
             data: result.curve.map((p) => p.discount),
-            itemStyle: { color: '#c0392b' },
-            areaStyle: { color: 'rgba(192,57,43,0.10)' },
+            itemStyle: { color: '#a63d2f' },
+            areaStyle: { color: 'rgba(166,61,47,0.07)' },
             markLine: {
               silent: true,
               symbol: 'none',
-              label: { formatter: '目标 30%', fontSize: 11 },
-              lineStyle: { color: '#2e8b57', type: 'dashed' },
+              label: { formatter: '目标 30%', fontSize: 10, color: '#5f735c' },
+              lineStyle: { color: '#5f735c', type: 'dashed', width: 1 },
               data: [{ yAxis: 0.3 }],
             },
           },
@@ -153,16 +153,16 @@ export default function Simulator() {
       {
         animationDuration: 500,
         tooltip: { trigger: 'axis' },
-        legend: { top: 0, textStyle: { color: '#4b5563' } },
+        legend: { top: 0, textStyle: { color: '#5d574e' } },
         grid: { left: 58, right: 58, top: 42, bottom: 34 },
         xAxis: {
           type: 'category',
           data: trajectory.points.map((p) => p.shortLabel),
           name: '决策步',
-          axisLine: { lineStyle: { color: '#c9d0da' } },
+          axisLine: { lineStyle: { color: '#c9c2b6' } },
         },
         yAxis: [
-          { type: 'value', name: '曝光(M)', splitLine: { lineStyle: { color: '#eef1f6' } } },
+          { type: 'value', name: '曝光(M)', splitLine: { lineStyle: { color: '#e6e0d5' } } },
           { type: 'value', name: '粉丝(M)', splitLine: { show: false } },
         ],
         series: [
@@ -172,9 +172,9 @@ export default function Simulator() {
             smooth: true,
             symbolSize: 6,
             data: trajectory.points.map((p) => p.exposureM),
-            lineStyle: { color: '#c0392b', width: 3 },
-            itemStyle: { color: '#c0392b' },
-            areaStyle: { color: 'rgba(192,57,43,0.08)' },
+            lineStyle: { color: '#a63d2f', width: 3 },
+            itemStyle: { color: '#a63d2f' },
+            areaStyle: { color: 'rgba(166,61,47,0.06)' },
           },
           {
             name: '你的粉丝预测',
@@ -183,8 +183,8 @@ export default function Simulator() {
             smooth: true,
             symbolSize: 6,
             data: trajectory.points.map((p) => p.followersM),
-            lineStyle: { color: '#2563a6', width: 3 },
-            itemStyle: { color: '#2563a6' },
+            lineStyle: { color: '#3d5a6c', width: 3 },
+            itemStyle: { color: '#3d5a6c' },
           },
           {
             name: '论文路径曝光',
@@ -192,7 +192,7 @@ export default function Simulator() {
             smooth: true,
             symbol: 'none',
             data: paper.points.map((p) => p.exposureM),
-            lineStyle: { color: '#c0392b', type: 'dashed', opacity: 0.55 },
+            lineStyle: { color: '#a63d2f', type: 'dashed', opacity: 0.55 },
           },
           {
             name: '论文路径粉丝',
@@ -201,7 +201,7 @@ export default function Simulator() {
             smooth: true,
             symbol: 'none',
             data: paper.points.map((p) => p.followersM),
-            lineStyle: { color: '#2563a6', type: 'dashed', opacity: 0.55 },
+            lineStyle: { color: '#3d5a6c', type: 'dashed', opacity: 0.55 },
           },
         ],
       },
@@ -216,15 +216,15 @@ export default function Simulator() {
       {
         animationDuration: 450,
         tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
-        legend: { top: 0, textStyle: { color: '#4b5563' } },
+        legend: { top: 0, textStyle: { color: '#5d574e' } },
         grid: { left: 52, right: 52, top: 40, bottom: 42 },
         xAxis: {
           type: 'category',
           data: trajectory.points.map((p) => p.shortLabel),
-          axisLabel: { fontSize: 10, color: '#6b7280' },
+          axisLabel: { fontSize: 10, color: '#6f6a61' },
         },
         yAxis: [
-          { type: 'value', name: '曝光(M)', splitLine: { lineStyle: { color: '#eef1f6' } } },
+          { type: 'value', name: '曝光(M)', splitLine: { lineStyle: { color: '#e6e0d5' } } },
           { type: 'value', name: '粉丝(M)', splitLine: { show: false } },
         ],
         series: [
@@ -234,7 +234,7 @@ export default function Simulator() {
             barWidth: '38%',
             data: trajectory.points.map((p, i) => ({
               value: p.exposureDeltaM,
-              itemStyle: { color: i === step ? '#c0392b' : '#e8b4ab', borderRadius: [4, 4, 0, 0] },
+              itemStyle: { color: i === step ? '#a63d2f' : '#d8b5aa', borderRadius: [2, 2, 0, 0] },
             })),
           },
           {
@@ -244,7 +244,7 @@ export default function Simulator() {
             barWidth: '38%',
             data: trajectory.points.map((p, i) => ({
               value: p.followersDeltaM,
-              itemStyle: { color: i === step ? '#2563a6' : '#a9c4e1', borderRadius: [4, 4, 0, 0] },
+              itemStyle: { color: i === step ? '#3d5a6c' : '#b9c8d2', borderRadius: [2, 2, 0, 0] },
             })),
           },
         ],
@@ -261,24 +261,24 @@ export default function Simulator() {
       {
         animationDuration: 450,
         tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
-        legend: { top: 0, textStyle: { color: '#4b5563' } },
+        legend: { top: 0, textStyle: { color: '#5d574e' } },
         grid: { left: 96, right: 24, top: 40, bottom: 30 },
-        xAxis: { type: 'value', name: '曝光增量(M)', splitLine: { lineStyle: { color: '#eef1f6' } } },
-        yAxis: { type: 'category', data: currentStageRows.map((row) => row.stage), axisLine: { lineStyle: { color: '#c9d0da' } } },
+        xAxis: { type: 'value', name: '曝光增量(M)', splitLine: { lineStyle: { color: '#e6e0d5' } } },
+        yAxis: { type: 'category', data: currentStageRows.map((row) => row.stage), axisLine: { lineStyle: { color: '#c9c2b6' } } },
         series: [
           {
             name: '你的策略',
             type: 'bar',
             data: currentStageRows.map((row) => row.exposureM),
-            itemStyle: { color: '#c0392b', borderRadius: [0, 5, 5, 0] },
-            label: { show: true, position: 'right', fontSize: 10 },
+            itemStyle: { color: '#a63d2f', borderRadius: [0, 2, 2, 0] },
+            label: { show: true, position: 'right', fontSize: 10, color: '#5d574e' },
           },
           {
             name: '论文路径',
             type: 'bar',
             data: currentStageRows.map((row) => paperMap.get(row.stage) ?? 0),
-            itemStyle: { color: '#9aa7b8', borderRadius: [0, 5, 5, 0] },
-            label: { show: true, position: 'right', fontSize: 10 },
+            itemStyle: { color: '#b8b2a7', borderRadius: [0, 2, 2, 0] },
+            label: { show: true, position: 'right', fontSize: 10, color: '#5d574e' },
           },
         ],
       },
@@ -317,10 +317,10 @@ export default function Simulator() {
       <section className="panel">
         <div className="panel-head">
           <div>
-            <h2 className="panel-title">策略模拟器 · 15 个决策节点</h2>
+            <h2 className="panel-title">策略模拟 · 15 个决策节点</h2>
             <p className="panel-sub">每个选项都是一组参数改动。做选择，看文化折扣指数如何实时变化。</p>
           </div>
-          <span className="badge">当前第 {Math.min(step + 1, decisions.length)} / {decisions.length} 步</span>
+          <span className="badge">Step {String(Math.min(step + 1, decisions.length)).padStart(2, '0')} / {decisions.length}</span>
         </div>
 
         <div className="progress-line"><div style={{ width: `${(Math.min(step, decisions.length) / decisions.length) * 100}%` }} /></div>
@@ -329,9 +329,9 @@ export default function Simulator() {
           <div>
             {isFinished ? (
               <div className="decision-card">
-                <span className="stage-tag">模拟完成</span>
-                <h3>所有决策已做出</h3>
-                <p className="question">综合得分 <b style={{ color: '#c0392b', fontSize: 28 }}>{result.successScore}</b> / 100。下方曲线与对比表已更新。</p>
+                <span className="stage-tag">模拟完成 / Complete</span>
+                <h3>所有决策已完成</h3>
+                <p className="question">综合得分 <b style={{ color: '#a63d2f', fontSize: 28 }}>{result.successScore}</b> / 100。下方曲线与对比表已更新。</p>
                 <div className="button-row">
                   <button className="btn primary" onClick={() => setStep(0)}>从头调整</button>
                   <button className="btn" onClick={() => applyPath('paper')}>复刻论文路径</button>
@@ -431,7 +431,7 @@ export default function Simulator() {
                       style={{ textAlign: 'left', width: '100%' }}
                       onClick={() => setStep(index)}
                     >
-                      {index + 1}. {d.title}<br /><span style={{ color: '#6b7280' }}>{option?.label ?? '未选择'}</span>
+                      {index + 1}. {d.title}<br /><span style={{ color: '#6f6a61' }}>{option?.label ?? '未选择'}</span>
                     </button>
                   );
                 })}
@@ -444,7 +444,7 @@ export default function Simulator() {
       <section className="panel">
         <div className="panel-head">
           <div>
-            <h2 className="panel-title">最终对比报告</h2>
+            <h2 className="panel-title">最终对比 · 三条基准路径</h2>
             <p className="panel-sub">预测值由论文基准值按策略参数换算，用于相对比较，不构成真实预测。</p>
           </div>
         </div>
@@ -479,7 +479,7 @@ export default function Simulator() {
       <section className="panel">
         <div className="panel-head">
           <div>
-            <h2 className="panel-title">曝光量与粉丝增减预测</h2>
+            <h2 className="panel-title">曝光与粉丝增长预测</h2>
             <p className="panel-sub">实线为你的当前策略，虚线为论文路径；双轴分别显示累计曝光量（百万次）与粉丝量（百万人）。</p>
           </div>
           <span className="badge">
@@ -488,7 +488,7 @@ export default function Simulator() {
         </div>
         <div className="chart-box" ref={predictionEl} />
 
-        <h3 className="panel-title" style={{ marginTop: 18 }}>当前决策各选项的预测差异</h3>
+        <h3 className="panel-title" style={{ marginTop: 18 }}>当前决策 · 选项预测</h3>
         <p className="panel-sub">阶段系数会放大或缩小同一选项的效果，因此不同阶段的同类选择贡献并不相同。</p>
         <div style={{ overflowX: 'auto' }}>
           <table className="compare-table">
@@ -527,7 +527,7 @@ export default function Simulator() {
       <section className="panel">
         <div className="panel-head">
           <div>
-            <h2 className="panel-title">阶段差异化分析</h2>
+            <h2 className="panel-title">阶段差异 · 七阶段拆解</h2>
             <p className="panel-sub">按品牌地基、内地破圈、东南亚、欧美、拉美、全球扩张、技术展望七个阶段拆解贡献。</p>
           </div>
         </div>
