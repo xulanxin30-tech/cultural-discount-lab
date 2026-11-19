@@ -1,0 +1,220 @@
+{
+  "metadata": {
+    "note": "15 个决策节点由论文案例提炼。effects 为对状态变量的增量：discount 越低越好，其余越高越好；budget 为消耗预算比例，risk 为额外风险。所有数值为教学演示参数，非论文实测值。",
+    "initialState": {"discount":0.78,"reach":0.18,"credibility":0.25,"community":0.15,"tourism":0.05,"budgetUsed":0,"risk":0.08}
+  },
+  "decisions": [
+    {
+      "id":"variety_show",
+      "stage":"内地破圈",
+      "title":"是否参加《我是歌手》？",
+      "question":"顶级竞技综艺是高风险曝光，也是公信力背书。要上场吗？",
+      "theory":["媒介事件"],
+      "options":[
+        {"id":"join","label":"参加顶级竞技综艺","description":"以 live 实力对接权威舞台，制造全民共享观看事件。","effects":{"discount":-0.10,"reach":0.22,"credibility":0.18,"community":0.06,"tourism":0,"budget":0.08,"risk":0.04}},
+        {"id":"skip","label":"专注专辑与常规宣传","description":"稳健但缺少破圈峰值。","effects":{"discount":-0.02,"reach":0.05,"credibility":0.03,"community":0.02,"tourism":0,"budget":0.03,"risk":0.01}}
+      ],
+      "recommended":"join",
+      "paperEvidence":"节目播出三个月内粉丝增长超 800 万",
+      "source":"paper"
+    },
+    {
+      "id":"language_eu_us",
+      "stage":"欧美试水",
+      "title":"欧美市场：坚持中文母语还是改唱英文？",
+      "question":"低语境受众能否被高语境作品打动？",
+      "theory":["高低语境文化","文化折扣"],
+      "options":[
+        {"id":"native","label":"坚持全中文演唱","description":"以旋律、情感与制作水准等低语境可解码要素承载文化内核（论文示例：文化折扣降低 20%）。","effects":{"discount":-0.20,"reach":0.06,"credibility":0.10,"community":0.05,"tourism":0,"budget":0.02,"risk":0.03}},
+        {"id":"english","label":"改唱英文版本","description":"短期降低语言门槛，但削弱创作者身份与差异化。","effects":{"discount":-0.08,"reach":0.10,"credibility":-0.04,"community":0.01,"tourism":0,"budget":0.12,"risk":0.06}}
+      ],
+      "recommended":"native",
+      "paperEvidence":"以\"音乐是通用语言\"为核心理念，坚持全中文演唱",
+      "source":"paper"
+    },
+    {
+      "id":"spanish_album",
+      "stage":"拉美本地化",
+      "title":"是否发行全西语专辑《Revelación》？",
+      "question":"语言本地化是激进实验还是必要投入？",
+      "theory":["文化折扣","本地化运营"],
+      "options":[
+        {"id":"release","label":"发行全西语专辑","description":"沉浸式语言姿态 + TikTok 定制内容，主动迁移语境。","effects":{"discount":-0.18,"reach":0.14,"credibility":0.08,"community":0.10,"tourism":0,"budget":0.18,"risk":0.05}},
+        {"id":"skip","label":"仅做字幕翻译","description":"成本低但难以进入当地主流圈层。","effects":{"discount":-0.04,"reach":0.03,"credibility":0.01,"community":0.01,"tourism":0,"budget":0.02,"risk":0.02}}
+      ],
+      "recommended":"release",
+      "paperEvidence":"2023 年 7 月成为推出全西班牙语录音室专辑的第一位华人歌手",
+      "source":"paper"
+    },
+    {
+      "id":"local_kol",
+      "stage":"东南亚深耕",
+      "title":"东南亚：与本土 KOL / 主流媒体如何联动？",
+      "question":"文化同源性如何转化为大众市场热度？",
+      "theory":["本地化运营","文化折扣"],
+      "options":[
+        {"id":"deep","label":"深度本土联动","description":"联合当地主流媒体与头部艺人，演出中多语言致谢。","effects":{"discount":-0.10,"reach":0.14,"credibility":0.06,"community":0.08,"tourism":0.03,"budget":0.10,"risk":0.02}},
+        {"id":"light","label":"浅层曝光合作","description":"仅购买媒体资源，缺少本地关系资产。","effects":{"discount":-0.04,"reach":0.06,"credibility":0.02,"community":0.02,"tourism":0.01,"budget":0.05,"risk":0.02}},
+        {"id":"none","label":"不合作","description":"依赖华语圈层自然扩散。","effects":{"discount":0,"reach":0.01,"credibility":0,"community":0,"tourism":0,"budget":0,"risk":0.01}}
+      ],
+      "recommended":"deep",
+      "paperEvidence":"吉隆坡单场约 6 万观众；多元语言共情表达 + 地化资源联动",
+      "source":"paper"
+    },
+    {
+      "id":"multilingual_thanks",
+      "stage":"东南亚深耕",
+      "title":"演出是否加入多语言致谢？",
+      "question":"语言形式之外的诚意能否被感知？",
+      "theory":["高低语境文化","本地化运营"],
+      "options":[
+        {"id":"yes","label":"切换粤语/普通话/英语/马来语致谢","description":"用本土语言拉近心理距离。","effects":{"discount":-0.06,"reach":0.04,"credibility":0.04,"community":0.06,"tourism":0.01,"budget":0.01,"risk":0}},
+        {"id":"no","label":"全程普通话","description":"保持统一表达但亲和感下降。","effects":{"discount":-0.01,"reach":0.01,"credibility":0,"community":0.01,"tourism":0,"budget":0,"risk":0}}
+      ],
+      "recommended":"yes",
+      "paperEvidence":"演出中无缝切换粤语、普通话、英语及马来语",
+      "source":"paper"
+    },
+    {
+      "id":"tiktok_challenge",
+      "stage":"全球扩张",
+      "title":"是否投入 TikTok 音乐挑战赛？",
+      "question":"短视频算法能否突破地域文化差异触达 Z 世代？",
+      "theory":["平台化传播","粉丝社群经济"],
+      "options":[
+        {"id":"invest","label":"重兵投入挑战赛 + 二创激励","description":"以碎片化内容制造峰值声量。","effects":{"discount":-0.05,"reach":0.18,"credibility":0.02,"community":0.12,"tourism":0,"budget":0.12,"risk":0.03}},
+        {"id":"wait","label":"观望，仅做常规发布","description":"节省预算但错失算法红利。","effects":{"discount":0,"reach":0.03,"credibility":0,"community":0.01,"tourism":0,"budget":0.02,"risk":0.01}}
+      ],
+      "recommended":"invest",
+      "paperEvidence":"TikTok 以音乐挑战赛与创意片段高效触达全球 Z 世代",
+      "source":"paper"
+    },
+    {
+      "id":"fan_community",
+      "stage":"内地破圈",
+      "title":"是否深度运营「棋士联盟」粉丝社群？",
+      "question":"瞬时流量如何转化为长期关系资产？",
+      "theory":["粉丝社群经济"],
+      "options":[
+        {"id":"deep","label":"专属社群 + 线上线下联动","description":"独家福利与组织化支持网络，沉淀私域口碑。","effects":{"discount":-0.03,"reach":0.06,"credibility":0.04,"community":0.20,"tourism":0.04,"budget":0.09,"risk":0.01}},
+        {"id":"basic","label":"常规社媒互动","description":"维持基本连接，粘性有限。","effects":{"discount":0,"reach":0.02,"credibility":0.01,"community":0.05,"tourism":0,"budget":0.02,"risk":0}}
+      ],
+      "recommended":"deep",
+      "paperEvidence":"微博粉丝超 6000 万，相关话题阅读量千亿级，抖音衍生播放超 500 亿次",
+      "source":"paper"
+    },
+    {
+      "id":"ip_collab",
+      "stage":"全球扩张",
+      "title":"是否绑定国际顶级 IP？",
+      "question":"借船出海：电影主题曲 / 电竞全球总决赛主题曲要不要接？",
+      "theory":["媒介事件"],
+      "options":[
+        {"id":"yes","label":"绑定《太空旅客》/S15 等顶级 IP","description":"借成熟 IP 受众结构完成圈层穿透。","effects":{"discount":-0.06,"reach":0.16,"credibility":0.12,"community":0.06,"tourism":0,"budget":0.10,"risk":0.02}},
+        {"id":"no","label":"保持独立发行节奏","description":"品牌纯粹但触达受限。","effects":{"discount":-0.01,"reach":0.03,"credibility":0.02,"community":0.01,"tourism":0,"budget":0.01,"risk":0.01}}
+      ],
+      "recommended":"yes",
+      "paperEvidence":"《Sacrifice》成为 S15 主题曲，MV 上线 25 天播放破亿",
+      "source":"paper"
+    },
+    {
+      "id":"stadium_tour",
+      "stage":"全球扩张",
+      "title":"巡演场馆规格：体育场还是体育馆？",
+      "question":"重资产巡演能否撬动城市与文旅资源？",
+      "theory":["媒介事件","城市品牌"],
+      "options":[
+        {"id":"stadium","label":"体育场专场（170 场）","description":"高成本、高声量、高文旅溢出。","effects":{"discount":-0.08,"reach":0.20,"credibility":0.10,"community":0.10,"tourism":0.28,"budget":0.30,"risk":0.06}},
+        {"id":"arena","label":"体育馆中型场次","description":"成本可控但地标效应弱。","effects":{"discount":-0.03,"reach":0.08,"credibility":0.04,"community":0.05,"tourism":0.08,"budget":0.14,"risk":0.02}},
+        {"id":"none","label":"不办巡演","description":"只做线上发布。","effects":{"discount":0,"reach":0.01,"credibility":0,"community":0.01,"tourism":0,"budget":0,"risk":0}}
+      ],
+      "recommended":"stadium",
+      "paperEvidence":"182 场巡演、170 场体育场专场，累计观众 700 万+",
+      "source":"paper"
+    },
+    {
+      "id":"city_tourism",
+      "stage":"全球扩张",
+      "title":"是否推动「艺人 IP + 城市地标 + 文旅经济」联动？",
+      "question":"演唱会能否成为城市文化新名片？",
+      "theory":["城市品牌","本地化运营"],
+      "options":[
+        {"id":"deep","label":"美食/打卡/旅游线路深度联动","description":"把演出升级为复合型消费事件。","effects":{"discount":-0.03,"reach":0.08,"credibility":0.08,"community":0.05,"tourism":0.24,"budget":0.08,"risk":0.02}},
+        {"id":"light","label":"简单地在当地做宣传","description":"文旅溢出有限。","effects":{"discount":0,"reach":0.03,"credibility":0.02,"community":0.01,"tourism":0.05,"budget":0.02,"risk":0.01}}
+      ],
+      "recommended":"deep",
+      "paperEvidence":"三亚两站预计带动综合消费 4.53 亿元；巡演整体衍生消费以百亿计",
+      "source":"paper"
+    },
+    {
+      "id":"prestige_stage",
+      "stage":"欧美试水",
+      "title":"是否争取顶级舞台与权威媒体背书？",
+      "question":"NASA、格莱美、BBC 等背书如何传导为声誉？",
+      "theory":["媒介事件","文化折扣"],
+      "options":[
+        {"id":"pursue","label":"主动争取国际舞台与专访","description":"顶级舞台背书 → 权威媒体聚焦 → 流媒体长尾扩散。","effects":{"discount":-0.07,"reach":0.12,"credibility":0.18,"community":0.04,"tourism":0,"budget":0.10,"risk":0.02}},
+        {"id":"skip","label":"不主动争取","description":"依赖平台自然增长。","effects":{"discount":0,"reach":0.02,"credibility":0.01,"community":0.01,"tourism":0,"budget":0,"risk":0.01}}
+      ],
+      "recommended":"pursue",
+      "paperEvidence":"NASA 科学突破奖、BBC/CNN 专题、格莱美官方报道",
+      "source":"paper"
+    },
+    {
+      "id":"streaming_longtail",
+      "stage":"全球扩张",
+      "title":"流媒体长尾运营力度？",
+      "question":"YouTube / Spotify 的长期资产如何沉淀？",
+      "theory":["平台化传播"],
+      "options":[
+        {"id":"consistent","label":"持续更新 + 多语言版本 + 算法优化","description":"把峰值声量沉淀为可复用长尾资产。","effects":{"discount":-0.05,"reach":0.12,"credibility":0.05,"community":0.06,"tourism":0,"budget":0.09,"risk":0.01}},
+        {"id":"sporadic","label":"间断发布","description":"长尾资产积累缓慢。","effects":{"discount":0,"reach":0.02,"credibility":0.01,"community":0.01,"tourism":0,"budget":0.01,"risk":0.01}}
+      ],
+      "recommended":"consistent",
+      "paperEvidence":"频道总播放超 20 亿、订阅超 1500 万；《光年之外》破 3 亿",
+      "source":"paper"
+    },
+    {
+      "id":"crisis_response",
+      "stage":"品牌地基",
+      "title":"版权纠纷：沉默创作还是公开互撕？",
+      "question":"危机如何处理才能形成品牌叙事？",
+      "theory":["粉丝社群经济","媒介事件"],
+      "options":[
+        {"id":"create","label":"不回应，持续创作并内化为作品","description":"把挣扎转化为《句号》《摩天动物园》的情感资源。","effects":{"discount":-0.05,"reach":0.04,"credibility":0.14,"community":0.10,"tourism":0,"budget":0.03,"risk":0.01}},
+        {"id":"fight","label":"公开对线","description":"短期话题高，长期信任受损。","effects":{"discount":0.02,"reach":0.10,"credibility":-0.12,"community":-0.08,"tourism":0,"budget":0.04,"risk":0.10}}
+      ],
+      "recommended":"create",
+      "paperEvidence":"面对 103 首歌曲版权纠纷，以沉默创作完成形象修复",
+      "source":"paper"
+    },
+    {
+      "id":"re_record",
+      "stage":"品牌地基",
+      "title":"是否重录经典作品、成立个人工作室？",
+      "question":"创作者如何重夺作品话语权？",
+      "theory":["粉丝社群经济","文化折扣"],
+      "options":[
+        {"id":"yes","label":"重录 + G Nation 工作室","description":"以创作者身份掌控版权与事业方向。","effects":{"discount":-0.04,"reach":0.05,"credibility":0.12,"community":0.08,"tourism":0,"budget":0.12,"risk":0.02}},
+        {"id":"no","label":"维持原有合约结构","description":"省成本但长期受制于人。","effects":{"discount":0,"reach":0.01,"credibility":0,"community":0.01,"tourism":0,"budget":0,"risk":0.01}}
+      ],
+      "recommended":"yes",
+      "paperEvidence":"2025 年 6 月推出重录版专辑；成立 G Nation",
+      "source":"paper"
+    },
+    {
+      "id":"ai_virtual",
+      "stage":"技术展望",
+      "title":"是否试点 AI 多语言翻唱与虚拟演出？",
+      "question":"技术放大传播势能，但能否替代情感厚度？",
+      "theory":["文化折扣","平台化传播"],
+      "options":[
+        {"id":"pilot","label":"小成本试点","description":"AI 用户画像 + 多语言适配 + 虚拟演出补充线下。","effects":{"discount":-0.06,"reach":0.10,"credibility":0.01,"community":0.04,"tourism":0.02,"budget":0.07,"risk":0.04}},
+        {"id":"skip","label":"暂不采用","description":"规避风险但失去效率红利。","effects":{"discount":0,"reach":0.01,"credibility":0,"community":0,"tourism":0,"budget":0,"risk":0}}
+      ],
+      "recommended":"pilot",
+      "paperEvidence":"论文展望：AI 用户画像、多语言 AI 翻唱、虚拟演唱会重构出海链路",
+      "source":"paper"
+    }
+  ]
+}

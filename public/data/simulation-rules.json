@@ -1,0 +1,44 @@
+{
+  "constants": {
+    "initialDiscount": 0.78,
+    "initialReach": 0.18,
+    "initialCredibility": 0.25,
+    "initialCommunity": 0.15,
+    "initialTourism": 0.05,
+    "initialBudgetUsed": 0,
+    "initialRisk": 0.08,
+    "budgetCap": 1.5,
+    "baselineViewsM": 300,
+    "baselineAudience": 7000000,
+    "baselineBoxOfficeUsdM": 424,
+    "baselineTourismCnyM": 10000
+  },
+  "formula": {
+    "discount": "clamp(initial + Σ effects.discount, 0.05, 0.95)",
+    "reach": "clamp(initial + Σ effects.reach, 0, 1)",
+    "credibility": "clamp(initial + Σ effects.credibility, 0, 1)",
+    "community": "clamp(initial + Σ effects.community, 0, 1)",
+    "tourism": "clamp(initial + Σ effects.tourism, 0, 1)",
+    "budgetUsed": "Σ effects.budget",
+    "risk": "clamp(initial + Σ effects.risk, 0, 1)",
+    "successScore": "round(100 * (0.35*(1-discount) + 0.25*reach + 0.20*credibility + 0.12*community + 0.08*tourism) - 12*max(0,budgetUsed-budgetCap) - 8*max(0,risk-0.25))",
+    "predictedViewsM": "round(baselineViewsM * (0.35 + 0.65*reach) * (1.25 - discount))",
+    "predictedAudience": "round(baselineAudience * (0.30 + 0.70*reach) * (1.20 - discount))",
+    "predictedBoxOfficeUsdM": "round(baselineBoxOfficeUsdM * (0.25 + 0.75*tourism) * (1.15 - discount))",
+    "predictedTourismCnyM": "round(baselineTourismCnyM * tourism)"
+  },
+  "paths": {
+    "paper": {
+      "label": "论文路径（复刻案例）",
+      "choices": {"variety_show":"join","language_eu_us":"native","spanish_album":"release","local_kol":"deep","multilingual_thanks":"yes","tiktok_challenge":"invest","fan_community":"deep","ip_collab":"yes","stadium_tour":"stadium","city_tourism":"deep","prestige_stage":"pursue","streaming_longtail":"consistent","crisis_response":"create","re_record":"yes","ai_virtual":"pilot"}
+    },
+    "conservative": {
+      "label": "保守路径（低投入）",
+      "choices": {"variety_show":"skip","language_eu_us":"english","spanish_album":"skip","local_kol":"none","multilingual_thanks":"no","tiktok_challenge":"wait","fan_community":"basic","ip_collab":"no","stadium_tour":"arena","city_tourism":"light","prestige_stage":"skip","streaming_longtail":"sporadic","crisis_response":"fight","re_record":"no","ai_virtual":"skip"}
+    },
+    "balanced": {
+      "label": "均衡路径（有限预算）",
+      "choices": {"variety_show":"join","language_eu_us":"native","spanish_album":"skip","local_kol":"light","multilingual_thanks":"yes","tiktok_challenge":"invest","fan_community":"deep","ip_collab":"yes","stadium_tour":"arena","city_tourism":"light","prestige_stage":"pursue","streaming_longtail":"consistent","crisis_response":"create","re_record":"no","ai_virtual":"pilot"}
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "metadata": {
+    "note": "论文披露口径与模型估算混合：播放量/粉丝/票房来自论文引用，discountIndex 为本项目按理论规则推算的示意值。",
+    "units": {"views":"百万次","followers":"百万人","boxOffice":"百万美元"}
+  },
+  "series": [
+    {"year":2014,"youtubeViewsM":0.6,"followersM":8.2,"boxOfficeUsdM":0,"discountIndex":0.72,"event":"《我是歌手第二季》播出，三个月粉丝增长超 800 万","source":"paper"},
+    {"year":2018,"youtubeViewsM":40,"followersM":20,"boxOfficeUsdM":0,"discountIndex":0.60,"event":"YouTube 内容积累；NASA 科学突破奖献唱","source":"paper+model"},
+    {"year":2019,"youtubeViewsM":200,"followersM":28,"boxOfficeUsdM":0,"discountIndex":0.48,"event":"《光年之外》MV 破 2 亿播放","source":"paper"},
+    {"year":2021,"youtubeViewsM":250,"followersM":35,"boxOfficeUsdM":0,"discountIndex":0.42,"event":"《光年之外》获吉尼斯世界纪录认证","source":"paper"},
+    {"year":2023,"youtubeViewsM":280,"followersM":45,"boxOfficeUsdM":120,"discountIndex":0.36,"event":"I AM GLORIA 巡演启动；S15 主题曲《Sacrifice》","source":"paper+model"},
+    {"year":2024,"youtubeViewsM":290,"followersM":52,"boxOfficeUsdM":260,"discountIndex":0.31,"event":"巡演覆盖欧美核心城市，上座率 90%+","source":"paper+model"},
+    {"year":2025,"youtubeViewsM":300,"followersM":60,"boxOfficeUsdM":424,"discountIndex":0.26,"event":"MV 破 3 亿；票房 4.24 亿美元；西语专辑《Revelación》","source":"paper"},
+    {"year":2026,"youtubeViewsM":310,"followersM":66,"boxOfficeUsdM":560,"discountIndex":0.22,"event":"巡演收官，170 场体育场专场刷新纪录（含预测值）","source":"paper+model"}
+  ]
+}

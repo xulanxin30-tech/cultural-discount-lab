@@ -1,0 +1,45 @@
+{
+  "metadata": {
+    "title": "I AM GLORIA 巡演城市样本",
+    "note": "总量口径来自论文：2023-12 至 2026-10，3 大洲 7 国 69 城，182 场（其中体育场 170 场），累计观众 700 万+；截至 2025-03 票房 4.24 亿美元。以下为用于可视化演示的城市样本，标注 illustrative 的场次/消费为基于论文口径的示意估算，并非论文原始数据。",
+    "aggregates": {
+      "continents": 3,
+      "countries": 7,
+      "cities": 69,
+      "shows": 182,
+      "stadiumShows": 170,
+      "attendance": 7000000,
+      "boxOfficeUsdM": 424,
+      "avgOccupancy": 0.95
+    }
+  },
+  "cities": [
+    {"id":"guangzhou","name":"广州","country":"中国","region":"内地","lat":23.1291,"lng":113.2644,"year":2023,"stage":"内地破圈","shows":10,"attendance":110000,"boxOfficeUsdM":46,"occupancy":0.97,"tourismCnyM":380,"youtubeViewsM":12,"source":"paper","note":"巡演首站，2023 年 12 月启动"},
+    {"id":"shanghai","name":"上海","country":"中国","region":"内地","lat":31.2304,"lng":121.4737,"year":2024,"stage":"内地破圈","shows":12,"attendance":150000,"boxOfficeUsdM":62,"occupancy":0.98,"tourismCnyM":520,"youtubeViewsM":18,"source":"paper","note":"单城连开 12 场纪录"},
+    {"id":"shenzhen","name":"深圳","country":"中国","region":"内地","lat":22.5431,"lng":114.0579,"year":2026,"stage":"全球扩张","shows":12,"attendance":145000,"boxOfficeUsdM":58,"occupancy":0.98,"tourismCnyM":480,"youtubeViewsM":15,"source":"paper","note":"大运中心连开 12 场，收官站"},
+    {"id":"sanya","name":"三亚","country":"中国","region":"内地","lat":18.2528,"lng":109.5119,"year":2025,"stage":"内地破圈","shows":2,"attendance":80000,"boxOfficeUsdM":22,"occupancy":0.96,"tourismCnyM":453,"youtubeViewsM":6,"source":"paper","note":"2025 年 12 月两站预计带动综合消费 4.53 亿元"},
+    {"id":"beijing","name":"北京","country":"中国","region":"内地","lat":39.9042,"lng":116.4074,"year":2024,"stage":"内地破圈","shows":6,"attendance":75000,"boxOfficeUsdM":31,"occupancy":0.96,"tourismCnyM":260,"youtubeViewsM":9,"source":"illustrative","note":"示意估算"},
+    {"id":"chengdu","name":"成都","country":"中国","region":"内地","lat":30.5728,"lng":104.0668,"year":2024,"stage":"内地破圈","shows":4,"attendance":50000,"boxOfficeUsdM":19,"occupancy":0.95,"tourismCnyM":170,"youtubeViewsM":6,"source":"illustrative","note":"示意估算"},
+    {"id":"hangzhou","name":"杭州","country":"中国","region":"内地","lat":30.2741,"lng":120.1551,"year":2025,"stage":"内地破圈","shows":4,"attendance":48000,"boxOfficeUsdM":18,"occupancy":0.95,"tourismCnyM":160,"youtubeViewsM":5,"source":"illustrative","note":"示意估算"},
+    {"id":"wuhan","name":"武汉","country":"中国","region":"内地","lat":30.5928,"lng":114.3055,"year":2024,"stage":"内地破圈","shows":3,"attendance":36000,"boxOfficeUsdM":14,"occupancy":0.94,"tourismCnyM":120,"youtubeViewsM":4,"source":"illustrative","note":"示意估算"},
+    {"id":"nanjing","name":"南京","country":"中国","region":"内地","lat":32.0603,"lng":118.7969,"year":2025,"stage":"内地破圈","shows":3,"attendance":35000,"boxOfficeUsdM":13,"occupancy":0.94,"tourismCnyM":110,"youtubeViewsM":4,"source":"illustrative","note":"示意估算"},
+    {"id":"hongkong","name":"中国香港","country":"中国香港","region":"中国香港","lat":22.3193,"lng":114.1694,"year":2023,"stage":"品牌地基","shows":4,"attendance":42000,"boxOfficeUsdM":17,"occupancy":0.93,"tourismCnyM":140,"youtubeViewsM":7,"source":"illustrative","note":"出道期粤语市场样本，示意估算"},
+    {"id":"kualalumpur","name":"吉隆坡","country":"马来西亚","region":"东南亚","lat":3.1390,"lng":101.6869,"year":2025,"stage":"东南亚深耕","shows":3,"attendance":90000,"boxOfficeUsdM":24,"occupancy":0.99,"tourismCnyM":180,"youtubeViewsM":10,"source":"paper","note":"武吉加里尔国家体育场单场约 6 万人，三层看台全开"},
+    {"id":"singapore","name":"新加坡","country":"新加坡","region":"东南亚","lat":1.3521,"lng":103.8198,"year":2018,"stage":"东南亚深耕","shows":3,"attendance":45000,"boxOfficeUsdM":12,"occupancy":0.92,"tourismCnyM":90,"youtubeViewsM":6,"source":"illustrative","note":"示意估算"},
+    {"id":"jakarta","name":"雅加达","country":"印度尼西亚","region":"东南亚","lat":-6.2088,"lng":106.8456,"year":2018,"stage":"东南亚深耕","shows":2,"attendance":32000,"boxOfficeUsdM":8,"occupancy":0.90,"tourismCnyM":60,"youtubeViewsM":4,"source":"illustrative","note":"示意估算"},
+    {"id":"bangkok","name":"曼谷","country":"泰国","region":"东南亚","lat":13.7563,"lng":100.5018,"year":2019,"stage":"东南亚深耕","shows":2,"attendance":30000,"boxOfficeUsdM":7,"occupancy":0.89,"tourismCnyM":55,"youtubeViewsM":3,"source":"illustrative","note":"示意估算"},
+    {"id":"london","name":"伦敦","country":"英国","region":"欧洲","lat":51.5074,"lng":-0.1278,"year":2024,"stage":"欧美试水","shows":4,"attendance":60000,"boxOfficeUsdM":28,"occupancy":0.93,"tourismCnyM":150,"youtubeViewsM":12,"source":"paper","note":"核心城市上座率 90% 以上（论文口径）"},
+    {"id":"paris","name":"巴黎","country":"法国","region":"欧洲","lat":48.8566,"lng":2.3522,"year":2024,"stage":"欧美试水","shows":4,"attendance":58000,"boxOfficeUsdM":26,"occupancy":0.92,"tourismCnyM":145,"youtubeViewsM":11,"source":"paper","note":"核心城市上座率 90% 以上（论文口径）"},
+    {"id":"berlin","name":"柏林","country":"德国","region":"欧洲","lat":52.5200,"lng":13.4050,"year":2025,"stage":"全球扩张","shows":3,"attendance":42000,"boxOfficeUsdM":18,"occupancy":0.91,"tourismCnyM":100,"youtubeViewsM":8,"source":"illustrative","note":"示意估算"},
+    {"id":"amsterdam","name":"阿姆斯特丹","country":"荷兰","region":"欧洲","lat":52.3676,"lng":4.9041,"year":2025,"stage":"全球扩张","shows":2,"attendance":28000,"boxOfficeUsdM":12,"occupancy":0.90,"tourismCnyM":70,"youtubeViewsM":5,"source":"illustrative","note":"示意估算"},
+    {"id":"newyork","name":"纽约","country":"美国","region":"北美","lat":40.7128,"lng":-74.0060,"year":2023,"stage":"欧美试水","shows":5,"attendance":75000,"boxOfficeUsdM":35,"occupancy":0.94,"tourismCnyM":190,"youtubeViewsM":16,"source":"paper","note":"核心城市上座率 90% 以上（论文口径）"},
+    {"id":"losangeles","name":"洛杉矶","country":"美国","region":"北美","lat":34.0522,"lng":-118.2437,"year":2023,"stage":"欧美试水","shows":4,"attendance":60000,"boxOfficeUsdM":30,"occupancy":0.92,"tourismCnyM":170,"youtubeViewsM":14,"source":"illustrative","note":"示意估算"},
+    {"id":"toronto","name":"多伦多","country":"加拿大","region":"北美","lat":43.6532,"lng":-79.3832,"year":2025,"stage":"全球扩张","shows":3,"attendance":42000,"boxOfficeUsdM":17,"occupancy":0.91,"tourismCnyM":95,"youtubeViewsM":7,"source":"illustrative","note":"示意估算"},
+    {"id":"vancouver","name":"温哥华","country":"加拿大","region":"北美","lat":49.2827,"lng":-123.1207,"year":2025,"stage":"全球扩张","shows":3,"attendance":40000,"boxOfficeUsdM":16,"occupancy":0.91,"tourismCnyM":90,"youtubeViewsM":6,"source":"illustrative","note":"示意估算"},
+    {"id":"lasvegas","name":"拉斯维加斯","country":"美国","region":"北美","lat":36.1699,"lng":-115.1398,"year":2025,"stage":"全球扩张","shows":3,"attendance":38000,"boxOfficeUsdM":15,"occupancy":0.90,"tourismCnyM":180,"youtubeViewsM":6,"source":"illustrative","note":"示意估算"},
+    {"id":"mexicocity","name":"墨西哥城","country":"墨西哥","region":"拉美数字市场","lat":19.4326,"lng":-99.1332,"year":2023,"stage":"拉美本地化","shows":0,"attendance":25000,"boxOfficeUsdM":3,"occupancy":0,"tourismCnyM":0,"youtubeViewsM":22,"source":"illustrative","note":"《Revelación》西语专辑与 TikTok 传播的数字市场样本"},
+    {"id":"saopaulo","name":"圣保罗","country":"巴西","region":"拉美数字市场","lat":-23.5505,"lng":-46.6333,"year":2023,"stage":"拉美本地化","shows":0,"attendance":30000,"boxOfficeUsdM":4,"occupancy":0,"tourismCnyM":0,"youtubeViewsM":28,"source":"illustrative","note":"西语内容触达样本，示意估算"},
+    {"id":"buenosaires","name":"布宜诺斯艾利斯","country":"阿根廷","region":"拉美数字市场","lat":-34.6037,"lng":-58.3816,"year":2023,"stage":"拉美本地化","shows":0,"attendance":18000,"boxOfficeUsdM":2,"occupancy":0,"tourismCnyM":0,"youtubeViewsM":19,"source":"illustrative","note":"西语内容触达样本，示意估算"},
+    {"id":"bogota","name":"波哥大","country":"哥伦比亚","region":"拉美数字市场","lat":4.7110,"lng":-74.0721,"year":2023,"stage":"拉美本地化","shows":0,"attendance":15000,"boxOfficeUsdM":2,"occupancy":0,"tourismCnyM":0,"youtubeViewsM":16,"source":"illustrative","note":"西语内容触达样本，示意估算"}
+  ]
+}
