@@ -1,7 +1,16 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import * as echarts from 'echarts';
 import { loadDecisions, loadRules, loadTheoryMap } from '../lib/data';
-import { comparePaths, defaultChoices, percent, runSimulation } from '../lib/engine';
+import {
+  comparePaths,
+  comparePredictions,
+  defaultChoices,
+  optionImpact,
+  percent,
+  predictTrajectory,
+  runSimulation,
+  stageAnalysis,
+} from '../lib/engine';
 import type { Decision, Rules, TheoryMapData } from '../types';
 
 export default function Simulator() {
@@ -15,6 +24,12 @@ export default function Simulator() {
 
   const curveEl = useRef<HTMLDivElement | null>(null);
   const curveChart = useRef<echarts.ECharts | null>(null);
+  const predictionEl = useRef<HTMLDivElement | null>(null);
+  const incrementEl = useRef<HTMLDivElement | null>(null);
+  const stageEl = useRef<HTMLDivElement | null>(null);
+  const predictionChart = useRef<echarts.ECharts | null>(null);
+  const incrementChart = useRef<echarts.ECharts | null>(null);
+  const stageChart = useRef<echarts.ECharts | null>(null);
 
   useEffect(() => {
     Promise.all([loadDecisions(), loadRules(), loadTheoryMap()])
@@ -29,13 +44,24 @@ export default function Simulator() {
   }, []);
 
   useEffect(() => {
-    if (!curveEl.current) return;
+    if (!curveEl.current || !predictionEl.current || !incrementEl.current || !stageEl.current) return;
     curveChart.current = echarts.init(curveEl.current);
-    const resize = () => curveChart.current?.resize();
+    predictionChart.current = echarts.init(predictionEl.current);
+    incrementChart.current = echarts.init(incrementEl.current);
+    stageChart.current = echarts.init(stageEl.current);
+    const resize = () => {
+      curveChart.current?.resize();
+      predictionChart.current?.resize();
+      incrementChart.current?.resize();
+      stageChart.current?.resize();
+    };
     window.addEventListener('resize', resize);
     return () => {
       window.removeEventListener('resize', resize);
       curveChart.current?.dispose();
+      predictionChart.current?.dispose();
+      incrementChart.current?.dispose();
+      stageChart.current?.dispose();
     };
   }, []);
 
@@ -46,6 +72,26 @@ export default function Simulator() {
 
   const comparisons = useMemo(
     () => (rules && decisions.length ? comparePaths(decisions, rules) : []),
+    [decisions, rules],
+  );
+
+  const trajectory = useMemo(
+    () => (rules && decisions.length ? predictTrajectory(choices, decisions, rules) : null),
+    [choices, decisions, rules],
+  );
+
+  const predictedPaths = useMemo(
+    () => (rules && decisions.length ? comparePredictions(decisions, rules) : []),
+    [decisions, rules],
+  );
+
+  const currentStageRows = useMemo(
+    () => (decisions.length ? stageAnalysis(decisions, choices) : []),
+    [decisions, choices],
+  );
+
+  const paperStageRows = useMemo(
+    () => (rules && decisions.length ? stageAnalysis(decisions, rules.paths.paper.choices) : []),
     [decisions, rules],
   );
 
@@ -98,6 +144,147 @@ export default function Simulator() {
       true,
     );
   }, [result]);
+
+  // 曝光量与粉丝增长预测：当前策略 vs 论文路径
+  useEffect(() => {
+    if (!trajectory || !predictionChart.current || !predictedPaths.length) return;
+    const paper = predictedPaths.find((path) => path.label.includes('论文')) ?? predictedPaths[0];
+    predictionChart.current.setOption(
+      {
+        animationDuration: 500,
+        tooltip: { trigger: 'axis' },
+        legend: { top: 0, textStyle: { color: '#4b5563' } },
+        grid: { left: 58, right: 58, top: 42, bottom: 34 },
+        xAxis: {
+          type: 'category',
+          data: trajectory.points.map((p) => p.shortLabel),
+          name: '决策步',
+          axisLine: { lineStyle: { color: '#c9d0da' } },
+        },
+        yAxis: [
+          { type: 'value', name: '曝光(M)', splitLine: { lineStyle: { color: '#eef1f6' } } },
+          { type: 'value', name: '粉丝(M)', splitLine: { show: false } },
+        ],
+        series: [
+          {
+            name: '你的曝光预测',
+            type: 'line',
+            smooth: true,
+            symbolSize: 6,
+            data: trajectory.points.map((p) => p.exposureM),
+            lineStyle: { color: '#c0392b', width: 3 },
+            itemStyle: { color: '#c0392b' },
+            areaStyle: { color: 'rgba(192,57,43,0.08)' },
+          },
+          {
+            name: '你的粉丝预测',
+            type: 'line',
+            yAxisIndex: 1,
+            smooth: true,
+            symbolSize: 6,
+            data: trajectory.points.map((p) => p.followersM),
+            lineStyle: { color: '#2563a6', width: 3 },
+            itemStyle: { color: '#2563a6' },
+          },
+          {
+            name: '论文路径曝光',
+            type: 'line',
+            smooth: true,
+            symbol: 'none',
+            data: paper.points.map((p) => p.exposureM),
+            lineStyle: { color: '#c0392b', type: 'dashed', opacity: 0.55 },
+          },
+          {
+            name: '论文路径粉丝',
+            type: 'line',
+            yAxisIndex: 1,
+            smooth: true,
+            symbol: 'none',
+            data: paper.points.map((p) => p.followersM),
+            lineStyle: { color: '#2563a6', type: 'dashed', opacity: 0.55 },
+          },
+        ],
+      },
+      true,
+    );
+  }, [trajectory, predictedPaths]);
+
+  // 每一步决策的边际增量柱状图
+  useEffect(() => {
+    if (!trajectory || !incrementChart.current) return;
+    incrementChart.current.setOption(
+      {
+        animationDuration: 450,
+        tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+        legend: { top: 0, textStyle: { color: '#4b5563' } },
+        grid: { left: 52, right: 52, top: 40, bottom: 42 },
+        xAxis: {
+          type: 'category',
+          data: trajectory.points.map((p) => p.shortLabel),
+          axisLabel: { fontSize: 10, color: '#6b7280' },
+        },
+        yAxis: [
+          { type: 'value', name: '曝光(M)', splitLine: { lineStyle: { color: '#eef1f6' } } },
+          { type: 'value', name: '粉丝(M)', splitLine: { show: false } },
+        ],
+        series: [
+          {
+            name: '曝光增量',
+            type: 'bar',
+            barWidth: '38%',
+            data: trajectory.points.map((p, i) => ({
+              value: p.exposureDeltaM,
+              itemStyle: { color: i === step ? '#c0392b' : '#e8b4ab', borderRadius: [4, 4, 0, 0] },
+            })),
+          },
+          {
+            name: '粉丝增量',
+            type: 'bar',
+            yAxisIndex: 1,
+            barWidth: '38%',
+            data: trajectory.points.map((p, i) => ({
+              value: p.followersDeltaM,
+              itemStyle: { color: i === step ? '#2563a6' : '#a9c4e1', borderRadius: [4, 4, 0, 0] },
+            })),
+          },
+        ],
+      },
+      true,
+    );
+  }, [trajectory, step]);
+
+  // 阶段差异化分析：当前策略与论文路径的曝光贡献对比
+  useEffect(() => {
+    if (!stageChart.current || !currentStageRows.length) return;
+    const paperMap = new Map(paperStageRows.map((row) => [row.stage, row.exposureM]));
+    stageChart.current.setOption(
+      {
+        animationDuration: 450,
+        tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+        legend: { top: 0, textStyle: { color: '#4b5563' } },
+        grid: { left: 96, right: 24, top: 40, bottom: 30 },
+        xAxis: { type: 'value', name: '曝光增量(M)', splitLine: { lineStyle: { color: '#eef1f6' } } },
+        yAxis: { type: 'category', data: currentStageRows.map((row) => row.stage), axisLine: { lineStyle: { color: '#c9d0da' } } },
+        series: [
+          {
+            name: '你的策略',
+            type: 'bar',
+            data: currentStageRows.map((row) => row.exposureM),
+            itemStyle: { color: '#c0392b', borderRadius: [0, 5, 5, 0] },
+            label: { show: true, position: 'right', fontSize: 10 },
+          },
+          {
+            name: '论文路径',
+            type: 'bar',
+            data: currentStageRows.map((row) => paperMap.get(row.stage) ?? 0),
+            itemStyle: { color: '#9aa7b8', borderRadius: [0, 5, 5, 0] },
+            label: { show: true, position: 'right', fontSize: 10 },
+          },
+        ],
+      },
+      true,
+    );
+  }, [currentStageRows, paperStageRows]);
 
   if (loading) return <div className="panel loading">正在加载决策节点与模拟规则…</div>;
   if (error || !rules || !result) return <div className="panel error">数据加载失败：{error}</div>;
@@ -284,6 +471,86 @@ export default function Simulator() {
                   <td>{row.predictedTourismCnyM}</td>
                 </tr>
               ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section className="panel">
+        <div className="panel-head">
+          <div>
+            <h2 className="panel-title">曝光量与粉丝增减预测</h2>
+            <p className="panel-sub">实线为你的当前策略，虚线为论文路径；双轴分别显示累计曝光量（百万次）与粉丝量（百万人）。</p>
+          </div>
+          <span className="badge">
+            预测终点 {trajectory?.finalExposureM ?? 0} M 曝光 · {trajectory?.finalFollowersM ?? 0} M 粉丝
+          </span>
+        </div>
+        <div className="chart-box" ref={predictionEl} />
+
+        <h3 className="panel-title" style={{ marginTop: 18 }}>当前决策各选项的预测差异</h3>
+        <p className="panel-sub">阶段系数会放大或缩小同一选项的效果，因此不同阶段的同类选择贡献并不相同。</p>
+        <div style={{ overflowX: 'auto' }}>
+          <table className="compare-table">
+            <thead>
+              <tr><th>选项</th><th>阶段</th><th>曝光增量(M)</th><th>粉丝增量(M)</th><th>效果分</th><th>是否选择</th></tr>
+            </thead>
+            <tbody>
+              {current.options.map((option) => {
+                const impact = optionImpact(current, option);
+                return (
+                  <tr key={option.id} className={choices[current.id] === option.id ? 'highlight' : ''}>
+                    <td>{option.label}</td>
+                    <td>{current.stage}</td>
+                    <td>{impact.exposureDeltaM}</td>
+                    <td>{impact.followersDeltaM.toFixed(2)}</td>
+                    <td>{impact.score.toFixed(2)}</td>
+                    <td>{choices[current.id] === option.id ? '✓ 已选' : '—'}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section className="panel">
+        <div className="panel-head">
+          <div>
+            <h2 className="panel-title">每一步的边际增量</h2>
+            <p className="panel-sub">柱子颜色加深的是当前所处步骤；每一步选择都直接改变曝光与粉丝的增量。</p>
+          </div>
+        </div>
+        <div className="chart-box small" ref={incrementEl} />
+      </section>
+
+      <section className="panel">
+        <div className="panel-head">
+          <div>
+            <h2 className="panel-title">阶段差异化分析</h2>
+            <p className="panel-sub">按品牌地基、内地破圈、东南亚、欧美、拉美、全球扩张、技术展望七个阶段拆解贡献。</p>
+          </div>
+        </div>
+        <div className="chart-box small" ref={stageEl} />
+        <div style={{ overflowX: 'auto', marginTop: 14 }}>
+          <table className="compare-table">
+            <thead>
+              <tr><th>阶段</th><th>你的曝光(M)</th><th>论文曝光(M)</th><th>你的粉丝(M)</th><th>论文粉丝(M)</th><th>关键选择</th></tr>
+            </thead>
+            <tbody>
+              {currentStageRows.map((row) => {
+                const paper = paperStageRows.find((item) => item.stage === row.stage);
+                return (
+                  <tr key={row.stage}>
+                    <td>{row.stage}</td>
+                    <td>{row.exposureM}</td>
+                    <td>{paper?.exposureM ?? 0}</td>
+                    <td>{row.followersM.toFixed(2)}</td>
+                    <td>{(paper?.followersM ?? 0).toFixed(2)}</td>
+                    <td style={{ textAlign: 'left', maxWidth: 420 }}>{row.options.join('；')}</td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>

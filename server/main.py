@@ -59,6 +59,74 @@ def init_db() -> None:
         conn.commit()
 
 
+STAGE_PROFILE: Dict[str, Dict[str, float]] = {
+    "品牌地基": {"exposure": 3, "followers": 0.3},
+    "内地破圈": {"exposure": 10, "followers": 1.4},
+    "东南亚深耕": {"exposure": 6, "followers": 0.7},
+    "欧美试水": {"exposure": 8, "followers": 0.9},
+    "拉美本地化": {"exposure": 7, "followers": 0.8},
+    "全球扩张": {"exposure": 12, "followers": 1.5},
+    "技术展望": {"exposure": 5, "followers": 0.5},
+}
+
+
+def option_impact(decision: Dict[str, Any], option: Dict[str, Any]) -> Dict[str, Any]:
+    profile = STAGE_PROFILE.get(decision["stage"], {"exposure": 8, "followers": 0.6})
+    e = option["effects"]
+    score = (
+        0.5
+        + 4 * e.get("reach", 0)
+        + 2.5 * e.get("credibility", 0)
+        + 3 * max(0, -e.get("discount", 0))
+        + 2 * e.get("community", 0)
+        + 1.5 * e.get("tourism", 0)
+        - 1.5 * max(0, e.get("risk", 0))
+        - 0.5 * e.get("budget", 0)
+    )
+    return {
+        "optionId": option["id"],
+        "label": option["label"],
+        "exposureDeltaM": max(1, round(profile["exposure"] * score)),
+        "followersDeltaM": max(0.01, round(profile["followers"] * score, 2)),
+        "score": round(score, 3),
+    }
+
+
+def predict_trajectory(choices: Dict[str, str]) -> Dict[str, Any]:
+    decisions = load_json("decisions.json")["decisions"]
+    constants = load_json("simulation-rules.json")["constants"]
+    exposure = constants.get("initialExposureM", 180)
+    followers = constants.get("initialFollowersM", 25)
+    points = []
+    for index, decision in enumerate(decisions, start=1):
+        choice_id = choices.get(decision["id"], decision["options"][0]["id"])
+        option = next(
+            (item for item in decision["options"] if item["id"] == choice_id),
+            decision["options"][0],
+        )
+        impact = option_impact(decision, option)
+        exposure += impact["exposureDeltaM"]
+        followers += impact["followersDeltaM"]
+        points.append(
+            {
+                "step": index,
+                "label": f"{index}. {decision['title']}",
+                "shortLabel": str(index),
+                "stage": decision["stage"],
+                "chosenLabel": option["label"],
+                "exposureDeltaM": impact["exposureDeltaM"],
+                "followersDeltaM": impact["followersDeltaM"],
+                "exposureM": round(exposure),
+                "followersM": round(followers, 1),
+            }
+        )
+    return {
+        "points": points,
+        "finalExposureM": round(exposure),
+        "finalFollowersM": round(followers, 1),
+    }
+
+
 def simulate(choices: Dict[str, str]) -> Dict[str, Any]:
     decision_data = load_json("decisions.json")
     rules = load_json("simulation-rules.json")
@@ -131,6 +199,7 @@ def simulate(choices: Dict[str, str]) -> Dict[str, Any]:
         "predictedTourismCnyM": round(constants["baselineTourismCnyM"] * metrics["tourism"]),
         "overBudget": over_budget,
         "overRisk": over_risk,
+        "prediction": predict_trajectory(choices),
     }
 
 

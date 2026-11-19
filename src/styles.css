@@ -136,6 +136,25 @@ button { font: inherit; cursor: pointer; }
 .slider-row input[type="range"] { flex: 1; accent-color: var(--accent); }
 .year-chip { font-weight: 700; color: var(--accent); min-width: 52px; }
 
+.control-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin: 6px 0 12px;
+}
+.control-row label { font-size: 13px; color: #4b5563; }
+.control-row select {
+  margin-left: 8px;
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: #fff;
+  color: var(--ink);
+  max-width: 360px;
+}
+
 .stat-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

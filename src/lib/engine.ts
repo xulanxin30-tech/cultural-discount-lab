@@ -1,4 +1,4 @@
-import type { ComparisonRow, Decision, Metrics, Rules, SimResult } from '../types';
+import type { ComparisonRow, Decision, DecisionOption, Metrics, Rules, SimResult } from '../types';
 
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
 
@@ -85,3 +85,140 @@ export function defaultChoices(decisions: Decision[], rules: Rules): Record<stri
 }
 
 export const percent = (value: number) => `${(value * 100).toFixed(1)}%`;
+
+/* ------------------------------------------------------------------ *
+ * 曝光量 / 粉丝增长预测
+ * ------------------------------------------------------------------ */
+
+export interface OptionImpact {
+  optionId: string;
+  label: string;
+  exposureDeltaM: number;
+  followersDeltaM: number;
+  score: number;
+}
+
+export interface PredictionPoint {
+  step: number;
+  label: string;
+  shortLabel: string;
+  stage: string;
+  chosenLabel: string;
+  exposureDeltaM: number;
+  followersDeltaM: number;
+  exposureM: number;
+  followersM: number;
+}
+
+export interface PredictionResult {
+  points: PredictionPoint[];
+  finalExposureM: number;
+  finalFollowersM: number;
+}
+
+export interface StageRow {
+  stage: string;
+  decisions: number;
+  options: string[];
+  exposureM: number;
+  followersM: number;
+}
+
+/** 不同阶段对曝光/粉丝的放大系数不同，体现「差异化分析」。 */
+const STAGE_PROFILE: Record<string, { exposure: number; followers: number }> = {
+  品牌地基: { exposure: 3, followers: 0.3 },
+  内地破圈: { exposure: 10, followers: 1.4 },
+  东南亚深耕: { exposure: 6, followers: 0.7 },
+  欧美试水: { exposure: 8, followers: 0.9 },
+  拉美本地化: { exposure: 7, followers: 0.8 },
+  全球扩张: { exposure: 12, followers: 1.5 },
+  技术展望: { exposure: 5, followers: 0.5 },
+};
+
+const STAGE_ORDER = Object.keys(STAGE_PROFILE);
+
+/** 把一个选项的效果换算为曝光量（百万次）与粉丝增量（百万人）。 */
+export function optionImpact(decision: Decision, option: DecisionOption): OptionImpact {
+  const profile = STAGE_PROFILE[decision.stage] ?? { exposure: 8, followers: 0.6 };
+  const e = option.effects;
+  const score =
+    0.5 +
+    4 * (e.reach ?? 0) +
+    2.5 * (e.credibility ?? 0) +
+    3 * Math.max(0, -(e.discount ?? 0)) +
+    2 * (e.community ?? 0) +
+    1.5 * (e.tourism ?? 0) -
+    1.5 * Math.max(0, e.risk ?? 0) -
+    0.5 * (e.budget ?? 0);
+
+  return {
+    optionId: option.id,
+    label: option.label,
+    exposureDeltaM: Math.max(1, Math.round(profile.exposure * score)),
+    followersDeltaM: Math.max(0.01, Math.round(profile.followers * score * 100) / 100),
+    score: Number(score.toFixed(3)),
+  };
+}
+
+/** 按决策顺序累计曝光量与粉丝量。 */
+export function predictTrajectory(choices: Record<string, string>, decisions: Decision[], rules: Rules): PredictionResult {
+  let exposureM = rules.constants.initialExposureM ?? 180;
+  let followersM = rules.constants.initialFollowersM ?? 25;
+  const points: PredictionPoint[] = [];
+
+  decisions.forEach((decision, index) => {
+    const choiceId = choices[decision.id] ?? decision.options[0].id;
+    const option = decision.options.find((item) => item.id === choiceId) ?? decision.options[0];
+    const impact = optionImpact(decision, option);
+    exposureM += impact.exposureDeltaM;
+    followersM += impact.followersDeltaM;
+    points.push({
+      step: index + 1,
+      label: `${index + 1}. ${decision.title}`,
+      shortLabel: `${index + 1}`,
+      stage: decision.stage,
+      chosenLabel: option.label,
+      exposureDeltaM: impact.exposureDeltaM,
+      followersDeltaM: impact.followersDeltaM,
+      exposureM: Math.round(exposureM),
+      followersM: Math.round(followersM * 10) / 10,
+    });
+  });
+
+  return {
+    points,
+    finalExposureM: Math.round(exposureM),
+    finalFollowersM: Math.round(followersM * 10) / 10,
+  };
+}
+
+/** 按阶段汇总，当前策略与论文路径可并排对比。 */
+export function stageAnalysis(decisions: Decision[], choices: Record<string, string>): StageRow[] {
+  const buckets = new Map<string, StageRow>();
+  decisions.forEach((decision) => {
+    const choiceId = choices[decision.id] ?? decision.options[0].id;
+    const option = decision.options.find((item) => item.id === choiceId) ?? decision.options[0];
+    const impact = optionImpact(decision, option);
+    const row = buckets.get(decision.stage) ?? {
+      stage: decision.stage,
+      decisions: 0,
+      options: [],
+      exposureM: 0,
+      followersM: 0,
+    };
+    row.decisions += 1;
+    row.options.push(`${decision.title}：${option.label}`);
+    row.exposureM += impact.exposureDeltaM;
+    row.followersM = Math.round((row.followersM + impact.followersDeltaM) * 100) / 100;
+    buckets.set(decision.stage, row);
+  });
+  return STAGE_ORDER.filter((stage) => buckets.has(stage)).map((stage) => buckets.get(stage)!);
+}
+
+export function comparePredictions(decisions: Decision[], rules: Rules) {
+  return Object.entries(rules.paths).map(([key, path]) => ({
+    label: path.label,
+    choices: path.choices,
+    ...predictTrajectory(path.choices, decisions, rules),
+  }));
+}
